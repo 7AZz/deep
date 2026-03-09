@@ -2,11 +2,11 @@ import { Button } from "./ui/button";
 import { useNavigate } from "react-router-dom";
 import { ReviewsDialog } from "./dialogs/ReviewsDialog";
 
-export default function Footer() {
+export default function Footer({ className }: { className?: string }) {
   const navigate = useNavigate();
 
   return (
-    <footer className="relative bg-black backdrop-blur-sm text-[#ff6b00] py-16">
+    <footer className={`relative bg-black backdrop-blur-sm text-[#ff6b00] py-16 ${className || ""}`}>
       <div className="container grid grid-cols-1 md:grid-cols-2 gap-12">
         {/* Left Section */}
         <div className="space-y-4">

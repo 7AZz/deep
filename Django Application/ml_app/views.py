@@ -5,15 +5,33 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models.detector2 import DeepfakeDetector
 from .models.image_detector import ImageDeepfakeDetector
+from .models.audio_detector import AudioDeepfakeDetector
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
-from .models.audio_detector import AudioDeepfakeDetector
 
-# Initialize detectors (no model path needed for mock version)
-video_detector = DeepfakeDetector()
-image_detector = ImageDeepfakeDetector()
+video_detector = None
+image_detector = None
+audio_detector = None
+
+def get_video_detector():
+    global video_detector
+    if video_detector is None:
+        video_detector = DeepfakeDetector()
+    return video_detector
+
+def get_image_detector():
+    global image_detector
+    if image_detector is None:
+        image_detector = ImageDeepfakeDetector()
+    return image_detector
+
+def get_audio_detector():
+    global audio_detector
+    if audio_detector is None:
+        audio_detector = AudioDeepfakeDetector()
+    return audio_detector
 
 @api_view(['POST'])
 def analyze_video(request):
@@ -37,7 +55,7 @@ def analyze_video(request):
         print(f"Video saved successfully, starting analysis...")
         
         # Analyze the video
-        result = video_detector.predict(temp_path)
+        result = get_video_detector().predict(temp_path)
         print(f"Analysis complete: {result}")
 
         # Clean up
@@ -77,7 +95,7 @@ def analyze_image(request):
         print(f"Image saved successfully, starting analysis...")
         
         # Analyze the image
-        result = image_detector.predict(temp_path)
+        result = get_image_detector().predict(temp_path)
         print(f"Analysis complete: {result}")
 
         # Clean up
@@ -89,6 +107,42 @@ def analyze_image(request):
 
     except Exception as e:
         print(f"Error in analyze_image: {str(e)}")
+        print(traceback.format_exc())
+        return Response({
+            'error': str(e),
+            'detail': traceback.format_exc()
+        }, status=500)
+
+@api_view(['POST'])
+def analyze_audio(request):
+    try:
+        audio_file = request.FILES.get('file')
+        if not audio_file:
+            return Response({'error': 'No audio file provided'}, status=400)
+
+        temp_dir = os.path.join(settings.MEDIA_ROOT, 'temp')
+        os.makedirs(temp_dir, exist_ok=True)
+
+        temp_path = os.path.join(temp_dir, audio_file.name)
+        print(f"Saving audio to temporary path: {temp_path}")
+
+        with open(temp_path, 'wb+') as destination:
+            for chunk in audio_file.chunks():
+                destination.write(chunk)
+
+        print(f"Audio saved successfully, starting analysis...")
+
+        result = get_audio_detector().predict(temp_path)
+        print(f"Analysis complete: {result}")
+
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
+            print(f"Temporary file removed: {temp_path}")
+
+        return Response(result)
+
+    except Exception as e:
+        print(f"Error in analyze_audio: {str(e)}")
         print(traceback.format_exc())
         return Response({
             'error': str(e),

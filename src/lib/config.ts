@@ -1,7 +1,10 @@
+const apiUrl = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+
 export const config = {
-  apiUrl: import.meta.env.VITE_API_URL || "http://127.0.0.1:8000",
+  apiUrl,
   endpoints: {
-    video: "http://127.0.0.1:8000/ml_app/api/analyze/",
-    image: "http://127.0.0.1:8000/ml_app/api/analyze-image/",
+    video: `${apiUrl}/ml_app/api/analyze/`,
+    image: `${apiUrl}/ml_app/api/analyze-image/`,
+    audio: `${apiUrl}/ml_app/api/analyze-audio/`,
   },
 };

@@ -21,7 +21,7 @@ export default function ImageDetection() {
     confidence?: number;
     face_detected?: boolean;
     image_size?: [number, number, number];
-  }>(null);
+  } | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const { user } = useAuth();

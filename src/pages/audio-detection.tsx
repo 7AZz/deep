@@ -19,7 +19,7 @@ function AudioDetection() {
   const [result, setResult] = useState<{
     result?: "REAL" | "FAKE";
     confidence?: number;
-  }>(null);
+  } | null>(null);
 
   const { user } = useAuth();
   const navigate = useNavigate();

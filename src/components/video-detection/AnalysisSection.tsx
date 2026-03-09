@@ -9,7 +9,7 @@ interface AnalysisSectionProps {
   videoUrl?: string;
   isAnalyzing?: boolean;
   confidenceScore?: number;
-  detectionResult?: "real" | "fake" | null;
+  detectionResult?: "real" | "fake" | "REAL" | "FAKE" | null;
   onVideoTimeUpdate?: (time: number) => void;
 }
 

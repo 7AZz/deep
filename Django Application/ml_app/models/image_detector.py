@@ -5,7 +5,9 @@ from tensorflow.keras.models import load_model
 import os
 
 class ImageDeepfakeDetector:
-    def __init__(self, model_path='ml_app/models/cnn_model.h5'):
+    def __init__(self, model_path=None):
+        if model_path is None:
+            model_path = os.path.join(os.path.dirname(__file__), 'cnn_model.h5')
         print("Initializing Image Deepfake Detector...")
         self.target_size = (128, 128)  # Changed to match video model input size
         

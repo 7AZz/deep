@@ -5,7 +5,9 @@ import soundfile as sf
 from tensorflow.keras.models import load_model
 
 class AudioDeepfakeDetector:
-    def __init__(self, model_path='C:/Users/rajes/Downloads/my_model.h5'):
+    def __init__(self, model_path=None):
+        if model_path is None:
+            model_path = os.path.join(os.path.dirname(__file__), 'my_model.h5')
         print("Initializing Audio Deepfake Detector...")
         try:
             self.model = self.load_model(model_path)

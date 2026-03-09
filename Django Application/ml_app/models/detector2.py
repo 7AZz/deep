@@ -7,7 +7,9 @@ from mtcnn import MTCNN
 from pathlib import Path
 
 class DeepfakeDetector:
-    def __init__(self, model_path='C:/tmp/deep/Django Application/ml_app/models/cnn_model.h5'):
+    def __init__(self, model_path=None):
+        if model_path is None:
+            model_path = os.path.join(os.path.dirname(__file__), 'cnn_model.h5')
         print("Initializing Deepfake Detector...")
         self.model_path = model_path
         self.model = self.load_model()

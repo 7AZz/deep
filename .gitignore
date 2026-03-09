@@ -29,3 +29,20 @@ dist-ssr
 
 # Keep vite cache
 !node_modules/.vite
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+*.egg-info/
+db.sqlite3
+
+# ML model files (large binaries)
+*.h5
+
+# Django media uploads
+media/
+
+# Environment
+.env

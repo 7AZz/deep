@@ -23,7 +23,7 @@ export default function VideoDetection() {
     faces_detected?: boolean[];
     total_frames?: number;
     frames_with_faces?: number;
-  }>(null);
+  } | null>(null);
 
   const { user } = useAuth();
   const navigate = useNavigate();
